@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>宜蘭三天兩夜行程規劃</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --primary: #2f6fed;
+      --primary-soft: #dfe9ff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #d7deea;
+      --accent: #18b7a0;
+      --shadow: 0 12px 30px rgba(36, 62, 99, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Noto Sans TC", Arial, sans-serif;
+      background: linear-gradient(180deg, #eef4ff 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 48px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(47,111,237,0.95), rgba(24,183,160,0.9));
+      color: white;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 4vw, 42px);
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 760px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.92);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .panel, .content-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel {
+      padding: 22px;
+      position: sticky;
+      top: 20px;
+    }
+
+    .panel h2,
+    .content-card h2 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 22px;
+    }
+
+    .option-group {
+      margin-bottom: 20px;
+    }
+
+    .option-group h3 {
+      margin: 0 0 12px;
+      font-size: 15px;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .chip-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .chip-grid input { display: none; }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 14px;
+      user-select: none;
+    }
+
+    .chip:hover {
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    .chip-grid input:checked + .chip {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      background: var(--primary);
+      color: white;
+      padding: 14px 18px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover { opacity: 0.94; }
+
+    .content {
+      display: grid;
+      gap: 20px;
+    }
+
+    .content-card {
+      padding: 24px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .summary-item {
+      background: #f8fbff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .summary-item strong {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .summary-item span {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .trip-days {
+      display: grid;
+      gap: 16px;
+    }
+
+    .day-card {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .day-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 18px;
+      background: linear-gradient(90deg, #f2f7ff, #f6fffd);
+      border-bottom: 1px solid var(--border);
+      gap: 12px;
+    }
+
+    .day-header h3 {
+      margin: 0;
+      font-size: 19px;
+    }
+
+    .tag {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 10px;
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .stops {
+      display: grid;
+      gap: 12px;
+      padding: 18px;
+    }
+
+    .stop {
+      border-left: 4px solid var(--primary);
+      padding: 4px 0 4px 14px;
+    }
+
+    .time {
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .stop-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .stop-note {
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .tips {
+      margin: 0;
+      padding-left: 18px;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+
+    @media (max-width: 920px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        position: static;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1>宜蘭三天兩夜行程規劃</h1>
+      <p>
+        依照你的旅遊風格、同行對象、交通方式與預算，自動組合出適合的宜蘭三天兩夜行程。
+        畫面上可直接切換不同選擇，快速查看推薦景點、每日安排與旅行提醒。
+      </p>
+    </section>
+
+    <div class="layout">
+      <aside class="panel">
+        <h2>行程偏好設定</h2>
+
+        <div class="option-group">
+          <h3>旅遊風格</h3>
+          <div class="chip-grid" id="styleOptions">
+            <label><input type="radio" name="style" value="nature" checked><span class="chip">自然療癒</span></label>
+            <label><input type="radio" name="style" value="family"><span class="chip">親子同遊</span></label>
+            <label><input type="radio" name="style" value="food"><span class="chip">美食放鬆</span></label>
+          </div>
+        </div>
+
+        <div class="option-group">
+          <h3>交通方式</h3>
+          <div class="chip-grid" id="transportOptions">
+            <label><input type="radio" name="transport" value="car" checked><span class="chip">開車自駕</span></label>
+            <label><input type="radio" name="transport" value="train"><span class="chip">火車＋計程車</span></label>
+          </div>
+        </div>
+
+        <div class="option-group">
+          <h3>預算區間</h3>
+          <div class="chip-grid" id="budgetOptions">
+            <label><input type="radio" name="budget" value="economy" checked><span class="chip">精省型</span></label>
+            <label><input type="radio" name="budget" value="comfort"><span class="chip">舒適型</span></label>
+            <label><input type="radio" name="budget" value="premium"><span class="chip">享受型</span></label>
+          </div>
+        </div>
+
+        <button id="generateBtn">更新推薦行程</button>
+      </aside>
+
+      <main class="content">
+        <section class="content-card">
+          <h2>本次推薦摘要</h2>
+          <div class="summary-grid">
+            <div class="summary-item">
+              <strong>推薦主題</strong>
+              <span id="summaryTheme">自然療癒慢旅</span>
+            </div>
+            <div class="summary-item">
+              <strong>適合對象</strong>
+              <span id="summaryAudience">情侶 / 朋友 / 小家庭</span>
+            </div>
+            <div class="summary-item">
+              <strong>建議花費</strong>
+              <span id="summaryBudget">每人約 NT$4,500～6,500</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-card">
+          <h2>三天兩夜詳細安排</h2>
+          <div id="tripDays" class="trip-days"></div>
+        </section>
+
+        <section class="content-card">
+          <h2>旅行提醒</h2>
+          <ul class="tips" id="tipsList"></ul>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const itineraries = {
+      nature: {
+        theme: "自然療癒慢旅",
+        audience: "情侶 / 朋友 / 小家庭",
+        budgets: {
+          economy: "每人約 NT$4,500～6,500",
+          comfort: "每人約 NT$6,500～9,000",
+          premium: "每人約 NT$9,000～13,000"
+        },
+        tips: [
+          "太平山與抹茶山路段天氣多變，建議攜帶薄外套與雨具。",
+          "若選擇火車移動，礁溪與羅東站周邊安排最順，山區建議包車。",
+          "泡湯後補充水分，晚餐可安排在礁溪或羅東夜市附近。"
+        ],
+        days: [
+          {
+            title: "Day 1｜礁溪暖身＋溫泉放鬆",
+            tag: "輕鬆進宜蘭",
+            stops: [
+              ["09:30", "抵達礁溪車站 / 礁溪市區", "先寄放行李，從市區開始輕鬆暖身，適合第一天不趕路。"],
+              ["11:00", "林美石磐步道", "綠蔭環繞、步道平緩，很適合喜歡自然景色的旅人。"],
+              ["13:00", "礁溪午餐", "可安排甕窯雞、蔥油餅或在地合菜，補足體力。"],
+              ["15:00", "五峰旗瀑布", "享受山林與瀑布景觀，拍照與散步兼具。"],
+              ["18:00", "入住溫泉旅宿", "傍晚回飯店泡湯休息，晚上可逛礁溪街區。"]
+            ]
+          },
+          {
+            title: "Day 2｜山林景觀＋湖畔慢遊",
+            tag: "風景主軸",
+            stops: [
+              ["08:30", "前往太平山 / 見晴懷古步道", "若自駕可一早上山；若搭車則建議改包車行程。"],
+              ["11:30", "太平山園區午餐", "以園區簡餐或自備點心為主，節省轉場時間。"],
+              ["14:30", "梅花湖", "回到平地後安排湖畔單車或散步，節奏更舒服。"],
+              ["17:30", "羅東夜市", "以夜市小吃作為晚餐，包含糕渣、卜肉、包心粉圓等。"],
+              ["20:00", "入住羅東 / 冬山民宿", "方便隔天往傳藝中心與海邊景點移動。"]
+            ]
+          },
+          {
+            title: "Day 3｜文化收尾＋海景返程",
+            tag: "慢慢回程",
+            stops: [
+              ["09:30", "國立傳統藝術中心", "適合用悠閒方式收尾，可看街頭表演、手作體驗與老街建築。"],
+              ["12:30", "冬山河周邊午餐", "安排景觀餐廳或特色簡餐，保留最後半天的舒適感。"],
+              ["14:00", "外澳 / 頭城濱海咖啡", "若時間足夠，可到海邊看龜山島、喝咖啡後返程。"],
+              ["16:30", "結束行程", "帶著放鬆節奏返回台北或其他出發地。"]
+            ]
+          }
+        ]
+      },
+      family: {
+        theme: "親子同遊歡樂版",
+        audience: "親子家庭 / 長輩同行",
+        budgets: {
+          economy: "每人約 NT$4,000～6,000",
+          comfort: "每人約 NT$6,000～8,500",
+          premium: "每人約 NT$8,500～12,000"
+        },
+        tips: [
+          "親子行程建議預留午休或飯店休息時間，避免孩子體力消耗過快。",
+          "下雨時可優先改至室內景點，如蘭陽博物館或觀光工廠。",
+          "若有嬰兒推車需求，請事先確認步道與民宿是否方便通行。"
+        ],
+        days: [
+          {
+            title: "Day 1｜可愛動物＋礁溪住宿",
+            tag: "孩子最愛",
+            stops: [
+              ["10:00", "張美阿嬤農場 / 斑比山丘", "安排餵食動物與拍照互動，第一天氣氛最輕鬆。"],
+              ["12:30", "員山 / 礁溪午餐", "選擇親子友善餐廳，保留休息空間。"],
+              ["14:30", "潭酵天地或觀光工廠", "室內參觀不怕天氣變化，也適合孩子消磨時間。"],
+              ["16:30", "入住礁溪親子飯店", "可挑有遊戲室、溫泉池的住宿。"],
+              ["19:00", "礁溪晚餐與散步", "在飯店附近簡單用餐，讓小朋友早點休息。"]
+            ]
+          },
+          {
+            title: "Day 2｜傳藝體驗＋冬山河放電",
+            tag: "寓教於樂",
+            stops: [
+              ["09:30", "國立傳統藝術中心", "安排手作、看表演與小吃，動線完整又好走。"],
+              ["13:00", "園區或附近午餐", "中午不必遠移動，孩子比較不累。"],
+              ["14:30", "冬山河親水公園", "騎車、散步、跑跳都適合，空間寬敞。"],
+              ["17:30", "羅東夜市 / 親子餐廳", "依小朋友狀況選擇夜市或提早回飯店用餐。"],
+              ["20:00", "入住羅東 / 五結", "選擇房間較大、停車方便的住宿。"]
+            ]
+          },
+          {
+            title: "Day 3｜博物館＋海邊收尾",
+            tag: "知性輕鬆",
+            stops: [
+              ["09:30", "蘭陽博物館", "建築造型吸睛，室內展館也適合親子參觀。"],
+              ["11:30", "頭城午餐", "可安排海鮮、麵食或親子友善咖啡館。"],
+              ["13:30", "外澳沙灘", "短暫看海、拍照、玩沙後返程。"],
+              ["15:30", "結束返程", "保留足夠時間讓孩子在車上休息。"]
+            ]
+          }
+        ]
+      },
+      food: {
+        theme: "美食放鬆享受旅",
+        audience: "情侶 / 朋友 / 慶生旅行",
+        budgets: {
+          economy: "每人約 NT$5,000～7,000",
+          comfort: "每人約 NT$7,000～10,000",
+          premium: "每人約 NT$10,000～15,000"
+        },
+        tips: [
+          "熱門餐廳與景觀咖啡廳建議先訂位，假日人潮較多。",
+          "若以火車移動，可優先選擇礁溪、羅東、頭城三區串接。",
+          "享受型預算可升級溫泉飯店、無菜單料理與海景咖啡廳。"
+        ],
+        days: [
+          {
+            title: "Day 1｜礁溪美食巡禮",
+            tag: "吃喝開場",
+            stops: [
+              ["10:30", "抵達礁溪", "以交通方便的礁溪作為美食旅行起點。"],
+              ["11:30", "甕窯雞 / 在地名店午餐", "第一餐直接安排代表性宜蘭料理。"],
+              ["14:00", "咖啡廳下午茶", "可選擇田野系或老宅系咖啡廳慢慢坐。"],
+              ["16:00", "湯圍溝公園散步泡腳", "在餐與餐之間留些放鬆時間。"],
+              ["18:30", "無菜單料理或溫泉飯店晚餐", "若預算較高，可直接安排慶生級晚餐。"]
+            ]
+          },
+          {
+            title: "Day 2｜羅東小吃＋景觀餐廳",
+            tag: "主力美食日",
+            stops: [
+              ["09:30", "睡到自然醒", "美食行程不趕路，保留充足休息。"],
+              ["11:00", "羅東林場周邊早午餐", "環境舒服，適合散步後用餐。"],
+              ["14:00", "冬山 / 員山景觀咖啡廳", "安排甜點、拍照、看田景山景。"],
+              ["17:30", "羅東夜市", "集中品嚐卜肉、三星蔥系列、包心粉圓等經典。"],
+              ["20:00", "羅東住宿", "夜市結束後步行回住宿最輕鬆。"]
+            ]
+          },
+          {
+            title: "Day 3｜海景咖啡＋伴手禮",
+            tag: "舒服收官",
+            stops: [
+              ["10:00", "頭城海景咖啡廳", "看海、放空、拍照，適合作為最後半天。"],
+              ["12:30", "頭城海鮮午餐", "若喜歡海鮮可安排桌菜或漁港周邊餐廳。"],
+              ["14:30", "伴手禮採買", "可買奶凍捲、牛舌餅、三星蔥餅等回家。"],
+              ["16:00", "返程", "用輕鬆不趕路的節奏結束兩夜三天。"]
+            ]
+          }
+        ]
+      }
+    };
+
+    const transportNotes = {
+      car: "建議採自駕動線，景點切換更自由，可涵蓋山區、湖區與海邊。",
+      train: "以火車站周邊景點為核心，遠程景點可搭計程車或包車串接。"
+    };
+
+    function getSelectedValue(name) {
+      return document.querySelector(`input[name="${name}"]:checked`).value;
+    }
+
+    function renderTrip() {
+      const style = getSelectedValue("style");
+      const transport = getSelectedValue("transport");
+      const budget = getSelectedValue("budget");
+      const plan = itineraries[style];
+
+      document.getElementById("summaryTheme").textContent = plan.theme;
+      document.getElementById("summaryAudience").textContent = plan.audience;
+      document.getElementById("summaryBudget").textContent = plan.budgets[budget];
+
+      const tripDays = document.getElementById("tripDays");
+      tripDays.innerHTML = plan.days.map(day => `
+        <article class="day-card">
+          <div class="day-header">
+            <h3>${day.title}</h3>
+            <span class="tag">${day.tag}</span>
+          </div>
+          <div class="stops">
+            ${day.stops.map(stop => `
+              <div class="stop">
+                <div class="time">${stop[0]}</div>
+                <div class="stop-title">${stop[1]}</div>
+                <div class="stop-note">${stop[2]}</div>
+              </div>
+            `).join("")}
+          </div>
+        </article>
+      `).join("");
+
+      const tips = [...plan.tips, transportNotes[transport]];
+      document.getElementById("tipsList").innerHTML = tips.map(tip => `<li>${tip}</li>`).join("");
+    }
+
+    document.getElementById("generateBtn").addEventListener("click", renderTrip);
+    document.querySelectorAll('input[name="style"], input[name="transport"], input[name="budget"]').forEach(input => {
+      input.addEventListener("change", renderTrip);
+    });
+
+    renderTrip();
+  </script>
+</body>
+</html>
